@@ -6,6 +6,8 @@ The interface is structured as a focused operational SaaS workflow: tutors compl
 
 The iSchool brand direction influenced the system through a warm orange primary action color, white product surfaces, rounded geometry, restrained shadows, clear hierarchy, and a modern education-product tone. The brand reference URL was not directly readable from this environment, so the implementation follows the visible iSchool app language and the requirements provided in the brief.
 
+The provided StartupTeen logo is used as the primary product identity in the header and first-viewport progress panel.
+
 ## Component Mapping
 
 - App header: product identity, primary navigation, admin entry

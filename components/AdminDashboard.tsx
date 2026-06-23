@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { BarChart3, Download, ExternalLink, Filter, Loader2, LogIn, LogOut, Search } from "lucide-react";
@@ -62,15 +63,22 @@ export function AdminDashboard() {
     return (
       <AdminShell
         center={
-          <section className="card max-w-xl p-8 text-center">
-            <div className="mx-auto grid h-16 w-16 place-items-center rounded-3xl bg-brand-soft text-brand-orange">
-              <LogIn size={30} />
+          <section className="surface max-w-xl p-8 text-center">
+            <div className="mx-auto grid h-24 w-24 place-items-center rounded-3xl bg-white shadow-sm ring-1 ring-slate-100">
+              <Image
+                src="/startupteen-logo.png"
+                alt="StartupTeen"
+                width={82}
+                height={82}
+                className="h-20 w-20 object-contain"
+                priority
+              />
             </div>
             <h1 className="mt-5 text-3xl font-black text-brand-ink">Admin Dashboard</h1>
             <p className="mt-3 text-slate-600">Sign in with an approved Google admin account.</p>
             <button
               onClick={() => signIn("google")}
-              className="mt-7 inline-flex items-center gap-2 rounded-2xl bg-brand-orange px-6 py-3 font-black text-white shadow-lg shadow-orange-200 transition hover:bg-brand-orangeDark"
+              className="primary-button mt-7"
             >
               <LogIn size={18} />
               Sign in with Google
@@ -86,11 +94,11 @@ export function AdminDashboard() {
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-brand-soft px-4 py-2 text-sm font-black text-brand-orange">
+            <div className="eyebrow">
               <BarChart3 size={16} />
               Admin analytics
             </div>
-            <h1 className="mt-4 text-4xl font-black text-brand-ink">Feedback Dashboard</h1>
+            <h1 className="mt-4 text-4xl font-black leading-tight text-brand-ink">Feedback Dashboard</h1>
             <p className="mt-2 text-slate-600">Signed in as {session.user?.email}</p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -109,7 +117,7 @@ export function AdminDashboard() {
           </div>
         </div>
 
-        {error && <div className="mb-6 rounded-2xl bg-red-50 px-4 py-3 font-bold text-red-700">{error}</div>}
+        {error && <div className="status-error mb-6">{error}</div>}
 
         <section className="mb-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <Metric label="Total feedback" value={analytics.total.toString()} />
@@ -118,7 +126,7 @@ export function AdminDashboard() {
           <Metric label="Needs attention" value={analytics.needsAttention.toString()} />
         </section>
 
-        <section className="card mb-6 p-5">
+        <section className="surface mb-6 p-5">
           <div className="mb-4 flex items-center gap-2 text-lg font-black text-brand-ink">
             <Filter size={20} />
             Filters
@@ -137,7 +145,7 @@ export function AdminDashboard() {
             <FilterInput label="To" type="date" value={filters.to} onChange={(value) => updateFilter("to", value)} />
             <button
               onClick={() => setFilters(emptyFilters)}
-              className="mt-6 rounded-2xl border border-slate-200 bg-white px-4 py-3 font-black text-slate-700 transition hover:border-brand-orange hover:text-brand-orange"
+              className="secondary-button mt-6"
             >
               Clear Filters
             </button>
@@ -149,7 +157,7 @@ export function AdminDashboard() {
           <Comparison title="Session performance comparison" rows={analytics.sessionPerformance} />
         </section>
 
-        <section className="card overflow-hidden">
+        <section className="surface overflow-hidden">
           <div className="flex items-center justify-between border-b border-slate-100 p-5">
             <h2 className="text-xl font-black text-brand-ink">Submissions</h2>
             {loading && <Loader2 className="animate-spin text-brand-orange" size={22} />}
@@ -170,7 +178,7 @@ export function AdminDashboard() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filtered.map((row) => (
-                  <tr key={row.submissionId} className="hover:bg-slate-50">
+                  <tr key={row.submissionId} className="transition hover:bg-brand-sky/60">
                     <td className="px-4 py-4">
                       <p className="font-mono font-bold text-brand-orange">{row.submissionId}</p>
                       <p className="text-xs text-slate-500">{row.timestamp}</p>
@@ -237,8 +245,8 @@ function AdminShell({ children, center }: { children?: React.ReactNode; center?:
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="card p-5">
-      <p className="text-sm font-bold text-slate-500">{label}</p>
+    <div className="surface p-5">
+      <p className="text-sm font-black uppercase tracking-wide text-slate-500">{label}</p>
       <p className="mt-2 text-3xl font-black text-brand-ink">{value}</p>
     </div>
   );
@@ -268,7 +276,7 @@ function FilterInput({
 
 function Comparison({ title, rows }: { title: string; rows: Array<{ name: string; average: number; count: number }> }) {
   return (
-    <div className="card p-5">
+    <div className="surface p-5">
       <h2 className="text-lg font-black text-brand-ink">{title}</h2>
       <div className="mt-5 space-y-4">
         {rows.slice(0, 6).map((row) => (

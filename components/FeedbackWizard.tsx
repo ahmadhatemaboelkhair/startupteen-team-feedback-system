@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -150,7 +151,7 @@ export function FeedbackWizard() {
         <motion.section
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          className="card w-full p-8 text-center sm:p-12"
+          className="surface w-full p-8 text-center sm:p-12"
         >
           <div className="mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-emerald-50 text-emerald-600">
             <CheckCircle2 size={42} />
@@ -163,7 +164,7 @@ export function FeedbackWizard() {
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="mt-8 rounded-2xl bg-brand-orange px-6 py-3 font-black text-white shadow-lg shadow-orange-200 transition hover:bg-brand-orangeDark"
+            className="primary-button mt-8"
           >
             Submit Another Feedback
           </button>
@@ -174,37 +175,62 @@ export function FeedbackWizard() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <section className="mb-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+      <section className="mb-8 grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-brand-soft px-4 py-2 text-sm font-black text-brand-orange">
+          <div className="eyebrow">
             <Sparkles size={16} />
             StartupTeen Feedback Workspace
           </div>
-          <h1 className="mt-5 max-w-3xl text-4xl font-black tracking-tight text-brand-ink sm:text-5xl">
+          <h1 className="mt-5 max-w-3xl text-4xl font-black leading-[1.05] tracking-tight text-brand-ink sm:text-5xl">
             Evaluate every team with clarity after each session.
           </h1>
           <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
             A guided, mobile-ready form for tutors with structured deliverables, live scoring,
             file uploads, and Google Sheets storage.
           </p>
-        </div>
-        <div className="card p-5">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-bold text-slate-500">Form progress</span>
-            <span className="text-sm font-black text-brand-orange">{progressPercent}%</span>
+          <div className="mt-6 flex flex-wrap gap-3 text-sm font-black text-brand-ink">
+            <span className="rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">Google Sheets ready</span>
+            <span className="rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">Drive uploads</span>
+            <span className="rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">Admin analytics</span>
           </div>
-          <div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-100">
-            <div
-              className="h-full rounded-full bg-brand-orange transition-all duration-500"
-              style={{ width: `${progressPercent}%` }}
-            />
+        </div>
+        <div className="surface p-5">
+          <div className="flex h-full flex-col justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="grid h-20 w-20 shrink-0 place-items-center rounded-3xl bg-white shadow-sm ring-1 ring-slate-100">
+                <Image
+                  src="/startupteen-logo.png"
+                  alt="StartupTeen"
+                  width={72}
+                  height={72}
+                  className="h-16 w-16 object-contain"
+                  priority
+                />
+              </div>
+              <div>
+                <p className="text-sm font-black uppercase tracking-wide text-brand-blue">Official workspace</p>
+                <p className="mt-1 text-2xl font-black text-brand-ink">Session feedback</p>
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-sm font-bold text-slate-500">Form progress</span>
+                <span className="text-sm font-black text-brand-orange">{progressPercent}%</span>
+              </div>
+              <div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-100">
+                <div
+                  className="h-full rounded-full bg-brand-orange transition-all duration-500"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         <ProgressSteps steps={steps} current={currentStep} />
-        <div className="card overflow-hidden">
+        <div className="surface overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.section
               key={currentStep}
@@ -309,7 +335,7 @@ export function FeedbackWizard() {
                       ))}
                     </select>
                   </Field>
-                  <div className="rounded-3xl bg-brand-soft p-5">
+                  <div className="rounded-3xl border border-orange-100 bg-brand-soft p-5">
                     <p className="text-sm font-black text-brand-orange">Deliverables loaded</p>
                     <p className="mt-1 text-sm text-slate-700">
                       {sessionChecklists[data.sessionNumber].join(", ")}
@@ -322,10 +348,10 @@ export function FeedbackWizard() {
                 <StepShell icon={<ClipboardList />} title={`${data.sessionNumber} Checklist`}>
                   <div className="space-y-4">
                     {data.checklist.map((item, index) => (
-                      <div key={item.item} className="rounded-3xl border border-slate-100 bg-slate-50 p-4">
+                      <div key={item.item} className="rounded-3xl border border-slate-100 bg-white p-4 shadow-sm">
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                           <h3 className="font-black text-brand-ink">{item.item}</h3>
-                          <div className="grid grid-cols-3 rounded-2xl bg-white p-1 shadow-sm">
+                          <div className="grid grid-cols-3 rounded-2xl bg-slate-50 p-1 shadow-sm ring-1 ring-slate-100">
                             {(["Yes", "Partially", "No"] as const).map((status) => (
                               <button
                                 type="button"
@@ -369,7 +395,7 @@ export function FeedbackWizard() {
 
               {currentStep === 4 && (
                 <StepShell icon={<Sparkles />} title="Team Evaluation">
-                  <div className="rounded-3xl bg-brand-ink p-5 text-white">
+                  <div className="rounded-3xl bg-brand-ink p-5 text-white shadow-soft">
                     <p className="text-sm font-bold text-orange-100">Live score summary</p>
                     <div className="mt-3 flex items-end gap-3">
                       <span className="text-5xl font-black">{scoreAverage.toFixed(1)}</span>
@@ -378,7 +404,7 @@ export function FeedbackWizard() {
                   </div>
                   <div className="space-y-5">
                     {scoreLabels.map((score) => (
-                      <label key={score.key} className="block rounded-3xl border border-slate-100 p-4">
+                      <label key={score.key} className="block rounded-3xl border border-slate-100 bg-white p-4 shadow-sm">
                         <div className="flex items-center justify-between gap-4">
                           <span className="font-bold text-slate-700">{score.label}</span>
                           <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand-soft font-black text-brand-orange">
@@ -402,7 +428,7 @@ export function FeedbackWizard() {
               {currentStep === 5 && (
                 <StepShell icon={<FileUp />} title="Feedback">
                   <div className="grid gap-5 lg:grid-cols-2">
-                    <div className="rounded-3xl border border-slate-100 p-4">
+                    <div className="rounded-3xl border border-slate-100 bg-white p-4 shadow-sm">
                       <p className="mb-3 text-sm font-black text-brand-orange">Option A</p>
                       <label className={labelBase}>Write feedback manually</label>
                       <textarea
@@ -468,7 +494,7 @@ export function FeedbackWizard() {
           </AnimatePresence>
 
           {submitState.status === "error" && (
-            <div className="mx-5 mb-5 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-bold text-red-700 sm:mx-8">
+          <div className="status-error mx-5 mb-5 sm:mx-8">
               {submitState.message}
             </div>
           )}
@@ -478,7 +504,7 @@ export function FeedbackWizard() {
               type="button"
               onClick={back}
               disabled={currentStep === 0 || submitState.status === "loading"}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 font-black text-slate-700 transition hover:border-brand-orange hover:text-brand-orange disabled:cursor-not-allowed disabled:opacity-40"
+              className="secondary-button"
             >
               <ArrowLeft size={18} />
               Back
@@ -487,7 +513,7 @@ export function FeedbackWizard() {
               <button
                 type="button"
                 onClick={next}
-                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-orange px-6 py-3 font-black text-white shadow-lg shadow-orange-200 transition hover:bg-brand-orangeDark"
+                className="primary-button"
               >
                 Continue
                 <ArrowRight size={18} />
@@ -497,7 +523,7 @@ export function FeedbackWizard() {
                 type="button"
                 onClick={submit}
                 disabled={submitState.status === "loading"}
-                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-orange px-6 py-3 font-black text-white shadow-lg shadow-orange-200 transition hover:bg-brand-orangeDark disabled:cursor-wait disabled:opacity-70"
+                className="primary-button"
               >
                 {submitState.status === "loading" ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
                 Submit Feedback
@@ -522,7 +548,7 @@ function StepShell({
   return (
     <div>
       <div className="mb-6 flex items-center gap-3">
-        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-soft text-brand-orange">
+        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-soft text-brand-orange ring-1 ring-orange-100">
           {icon}
         </span>
         <h2 className="text-2xl font-black text-brand-ink">{title}</h2>

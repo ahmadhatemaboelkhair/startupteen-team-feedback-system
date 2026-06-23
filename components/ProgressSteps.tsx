@@ -9,7 +9,7 @@ type Props = {
 
 export function ProgressSteps({ steps, current }: Props) {
   return (
-    <div className="card p-4 sm:p-5">
+    <div className="surface p-3 sm:p-4">
       <div className="flex gap-3 overflow-x-auto pb-1 lg:grid lg:grid-cols-1 lg:overflow-visible lg:pb-0">
         {steps.map((step, index) => {
           const active = index === current;
@@ -18,21 +18,24 @@ export function ProgressSteps({ steps, current }: Props) {
           return (
             <div
               key={step}
-              className="flex min-w-[92px] items-center gap-2 lg:min-w-0 lg:rounded-2xl lg:p-2"
+              className={[
+                "flex min-w-[104px] items-center gap-2 rounded-2xl p-2 transition lg:min-w-0",
+                active ? "bg-brand-soft ring-1 ring-orange-100" : "hover:bg-slate-50"
+              ].join(" ")}
             >
               <span
                 className={[
                   "grid h-9 w-9 shrink-0 place-items-center rounded-full text-sm font-black transition",
                   complete
-                    ? "bg-emerald-500 text-white"
+                    ? "bg-emerald-500 text-white shadow-sm"
                     : active
-                      ? "bg-brand-orange text-white shadow-lg shadow-orange-200"
+                      ? "bg-brand-orange text-white shadow-brand"
                       : "bg-slate-100 text-slate-500"
                 ].join(" ")}
               >
                 {complete ? <Check size={17} /> : index + 1}
               </span>
-              <span className={["text-xs font-bold leading-tight", active ? "text-brand-ink" : "text-slate-500"].join(" ")}>
+              <span className={["text-xs font-black leading-tight", active ? "text-brand-ink" : "text-slate-500"].join(" ")}>
                 {step}
               </span>
             </div>
