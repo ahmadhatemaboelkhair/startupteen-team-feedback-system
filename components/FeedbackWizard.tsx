@@ -255,7 +255,7 @@ export function FeedbackWizard() {
               className="w-full max-w-[220px] sm:max-w-[300px] lg:max-w-[360px]"
             >
               <Image
-                src="/startupteen-logo.png"
+                src="/startupteen-logo.svg"
                 alt="StartupTeen"
                 width={360}
                 height={360}

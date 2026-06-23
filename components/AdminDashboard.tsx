@@ -66,7 +66,7 @@ export function AdminDashboard() {
           <section className="surface max-w-xl p-8 text-center">
             <div className="mx-auto grid h-24 w-24 place-items-center rounded-3xl bg-white shadow-sm ring-1 ring-slate-100">
               <Image
-                src="/startupteen-logo.png"
+                src="/startupteen-logo.svg"
                 alt="StartupTeen"
                 width={82}
                 height={82}

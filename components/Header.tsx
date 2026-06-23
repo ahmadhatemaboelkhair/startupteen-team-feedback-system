@@ -10,7 +10,7 @@ export function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
           <Image
-            src="/startupteen-logo.png"
+            src="/startupteen-logo.svg"
             alt="StartupTeen"
             width={64}
             height={64}
