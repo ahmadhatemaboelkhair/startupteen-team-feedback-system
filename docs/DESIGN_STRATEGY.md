@@ -4,7 +4,7 @@
 
 The interface is structured as a focused operational SaaS workflow: tutors complete one decision at a time, while admins review results in a dense dashboard. This fits the project because feedback submission is repetitive, time-sensitive, and accuracy-sensitive after each session.
 
-The iSchool brand direction influenced the system through a warm orange primary action color, white product surfaces, rounded geometry, restrained shadows, clear hierarchy, and a modern education-product tone. The brand reference URL was not directly readable from this environment, so the implementation follows the visible iSchool app language and the requirements provided in the brief.
+The iSchool brand direction influenced the system through blue as the dominant product color, orange as the supporting action/accent color, and yellow as a sparse highlight. White product surfaces, rounded geometry, restrained shadows, clear hierarchy, and a modern education-product tone are used throughout. The brand reference URL was not directly readable from this environment, so the implementation follows the visible iSchool app language, supplied color-role screenshot, and the requirements provided in the brief.
 
 The provided StartupTeen logo is used as the primary product identity in the header and first-viewport progress panel.
 
@@ -56,13 +56,15 @@ The admin flow prioritizes scanning:
 - Loading state disables submission and shows a spinner
 - Success state shows the submission ID
 - Empty admin tables show a clear empty state
-- Hover and focus states use orange accents and visible focus rings
+- Hover and focus states use blue primary rings with orange supporting accents
 
 ## Design System Compliance Report
 
 The implementation follows the requested iSchool SaaS direction by using:
 
-- Orange as the primary action and state color
+- Blue as the dominant 60% product color
+- Orange as the 30% supporting accent color
+- Yellow as the 10% highlight color
 - White cards and clean dashboard surfaces
 - Rounded inputs, cards, controls, and buttons
 - Soft shadows with minimal visual noise

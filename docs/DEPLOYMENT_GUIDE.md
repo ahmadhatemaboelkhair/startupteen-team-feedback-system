@@ -204,10 +204,10 @@ http://localhost:3000
 T-1080
 ```
 
-6. Use a Group ID like:
+6. Use a Group ID that starts with `G-` followed by numbers, like:
 
 ```text
-G-1234
+G-1080
 ```
 
 7. Try uploading a small PDF or image.
@@ -609,6 +609,42 @@ If admin login fails:
 2. Confirm Google OAuth redirect URI matches your exact site URL.
 3. Confirm `NEXTAUTH_URL` matches your exact local or Vercel URL.
 4. Confirm `NEXTAUTH_SECRET` is set.
+
+If Google shows `Error 400: redirect_uri_mismatch`:
+
+1. Look at your website URL in the browser.
+2. If your site is:
+
+```text
+https://startupteen-team-feedback-system.vercel.app
+```
+
+3. Then your Google OAuth redirect URI must be exactly:
+
+```text
+https://startupteen-team-feedback-system.vercel.app/api/auth/callback/google
+```
+
+4. Go to [Google Cloud Console](https://console.cloud.google.com).
+5. Open your project.
+6. Open **Google Auth Platform**.
+7. Click **Clients**.
+8. Click your web client.
+9. Under **Authorized redirect URIs**, add the exact callback URL.
+10. Under **Authorized JavaScript origins**, add the site origin only:
+
+```text
+https://startupteen-team-feedback-system.vercel.app
+```
+
+11. Click **Save**.
+12. In Vercel, confirm `NEXTAUTH_URL` is exactly the site origin:
+
+```text
+https://startupteen-team-feedback-system.vercel.app
+```
+
+13. Redeploy from Vercel after changing environment variables.
 
 If uploaded file links cannot be opened:
 

@@ -20,7 +20,7 @@ export function ProgressSteps({ steps, current }: Props) {
               key={step}
               className={[
                 "flex min-w-[104px] items-center gap-2 rounded-2xl p-2 transition lg:min-w-0",
-                active ? "bg-brand-soft ring-1 ring-orange-100" : "hover:bg-slate-50"
+                active ? "bg-brand-sky ring-1 ring-blue-100" : "hover:bg-slate-50"
               ].join(" ")}
             >
               <span
@@ -29,7 +29,7 @@ export function ProgressSteps({ steps, current }: Props) {
                   complete
                     ? "bg-emerald-500 text-white shadow-sm"
                     : active
-                      ? "bg-brand-orange text-white shadow-brand"
+                      ? "bg-brand-primary text-white shadow-brand"
                       : "bg-slate-100 text-slate-500"
                 ].join(" ")}
               >

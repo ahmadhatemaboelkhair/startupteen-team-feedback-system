@@ -35,8 +35,8 @@ export function validateFeedbackPayload(payload: FeedbackPayload) {
   if (!/^T-\d+$/.test(payload.tutorId)) {
     return "Tutor ID must use T- followed by numbers.";
   }
-  if (!/^G-\d{4}$/.test(payload.groupId)) {
-    return "Group ID must use the format G-####.";
+  if (!/^G-\d+$/.test(payload.groupId)) {
+    return "Group ID must use G- followed by numbers.";
   }
   if (!payload.tutorName || !payload.school || !payload.teamName) {
     return "Please complete all required tutor and team fields.";

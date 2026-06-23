@@ -10,11 +10,12 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          orange: "#ff7a1a",
-          orangeDark: "#e45f00",
+          orange: "#FF7F1C",
+          orangeDark: "#E76400",
           blue: "#0867d8",
+          primary: "#056FEC",
           blueDark: "#064aa3",
-          yellow: "#ffd12f",
+          yellow: "#FFD700",
           ink: "#182033",
           muted: "#667085",
           line: "#eef0f4",

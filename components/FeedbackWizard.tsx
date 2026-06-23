@@ -88,7 +88,7 @@ export function FeedbackWizard() {
       return /^T-\d+$/.test(data.tutorId) && data.tutorName.trim() && data.school;
     }
     if (currentStep === 1) {
-      return /^G-\d{4}$/.test(data.groupId) && data.teamName.trim() && data.membersCount > 0;
+      return /^G-\d+$/.test(data.groupId) && data.teamName.trim() && data.membersCount > 0;
     }
     if (currentStep === 2) {
       return data.sessionDate && data.sessionNumber;
@@ -158,7 +158,7 @@ export function FeedbackWizard() {
           </div>
           <h1 className="text-3xl font-black text-brand-ink">Feedback Submitted Successfully</h1>
           <p className="mt-3 text-slate-600">Submission ID</p>
-          <p className="mt-2 rounded-2xl bg-slate-50 px-5 py-4 font-mono text-lg font-bold text-brand-orange">
+          <p className="mt-2 rounded-2xl bg-brand-sky px-5 py-4 font-mono text-lg font-bold text-brand-primary">
             {submitState.submissionId}
           </p>
           <button
@@ -189,9 +189,9 @@ export function FeedbackWizard() {
             file uploads, and Google Sheets storage.
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm font-black text-brand-ink">
-            <span className="rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">Google Sheets ready</span>
-            <span className="rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">Drive uploads</span>
-            <span className="rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">Admin analytics</span>
+            <span className="rounded-full border border-blue-100 bg-white px-4 py-2 shadow-sm">Google Sheets ready</span>
+            <span className="rounded-full border border-orange-100 bg-white px-4 py-2 shadow-sm">Drive uploads</span>
+            <span className="rounded-full border border-yellow-200 bg-white px-4 py-2 shadow-sm">Admin analytics</span>
           </div>
         </div>
         <div className="surface p-5">
@@ -215,11 +215,11 @@ export function FeedbackWizard() {
             <div>
               <div className="flex items-center justify-between gap-3">
                 <span className="text-sm font-bold text-slate-500">Form progress</span>
-                <span className="text-sm font-black text-brand-orange">{progressPercent}%</span>
+                <span className="text-sm font-black text-brand-primary">{progressPercent}%</span>
               </div>
               <div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-100">
                 <div
-                  className="h-full rounded-full bg-brand-orange transition-all duration-500"
+                  className="h-full rounded-full bg-brand-primary transition-all duration-500"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
@@ -288,8 +288,11 @@ export function FeedbackWizard() {
                       placeholder="G-1234"
                       value={data.groupId}
                       onChange={(event) => update("groupId", event.target.value.toUpperCase())}
-                      pattern="G-\d{4}"
+                      pattern="G-\d+"
                     />
+                    <span className="mt-2 block text-xs font-semibold text-slate-500">
+                      Use G- followed by numbers, for example G-1080.
+                    </span>
                   </Field>
                   <Field label="Team Name">
                     <input
@@ -335,8 +338,8 @@ export function FeedbackWizard() {
                       ))}
                     </select>
                   </Field>
-                  <div className="rounded-3xl border border-orange-100 bg-brand-soft p-5">
-                    <p className="text-sm font-black text-brand-orange">Deliverables loaded</p>
+                  <div className="rounded-3xl border border-blue-100 bg-brand-sky p-5">
+                    <p className="text-sm font-black text-brand-primary">Deliverables loaded</p>
                     <p className="mt-1 text-sm text-slate-700">
                       {sessionChecklists[data.sessionNumber].join(", ")}
                     </p>
@@ -366,8 +369,8 @@ export function FeedbackWizard() {
                                 className={[
                                   "rounded-xl px-3 py-2 text-xs font-black transition",
                                   item.completed === status
-                                    ? "bg-brand-orange text-white shadow"
-                                    : "text-slate-500 hover:text-brand-orange"
+                                    ? "bg-brand-primary text-white shadow"
+                                    : "text-slate-500 hover:text-brand-primary"
                                 ].join(" ")}
                               >
                                 {status}
@@ -396,7 +399,7 @@ export function FeedbackWizard() {
               {currentStep === 4 && (
                 <StepShell icon={<Sparkles />} title="Team Evaluation">
                   <div className="rounded-3xl bg-brand-ink p-5 text-white shadow-soft">
-                    <p className="text-sm font-bold text-orange-100">Live score summary</p>
+                    <p className="text-sm font-bold text-blue-100">Live score summary</p>
                     <div className="mt-3 flex items-end gap-3">
                       <span className="text-5xl font-black">{scoreAverage.toFixed(1)}</span>
                       <span className="pb-2 text-sm font-semibold text-slate-300">/ 10 average</span>
@@ -407,12 +410,12 @@ export function FeedbackWizard() {
                       <label key={score.key} className="block rounded-3xl border border-slate-100 bg-white p-4 shadow-sm">
                         <div className="flex items-center justify-between gap-4">
                           <span className="font-bold text-slate-700">{score.label}</span>
-                          <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand-soft font-black text-brand-orange">
+                          <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand-sky font-black text-brand-primary">
                             {data.scores[score.key]}
                           </span>
                         </div>
                         <input
-                          className="mt-4 h-2 w-full accent-brand-orange"
+                          className="mt-4 h-2 w-full accent-brand-primary"
                           type="range"
                           min={1}
                           max={10}
@@ -429,7 +432,7 @@ export function FeedbackWizard() {
                 <StepShell icon={<FileUp />} title="Feedback">
                   <div className="grid gap-5 lg:grid-cols-2">
                     <div className="rounded-3xl border border-slate-100 bg-white p-4 shadow-sm">
-                      <p className="mb-3 text-sm font-black text-brand-orange">Option A</p>
+                      <p className="mb-3 text-sm font-black text-brand-primary">Option A</p>
                       <label className={labelBase}>Write feedback manually</label>
                       <textarea
                         className="field min-h-64"
@@ -459,8 +462,8 @@ export function FeedbackWizard() {
 
               {currentStep === 6 && (
                 <StepShell icon={<Send />} title="Final Recommendation">
-                  <div className="rounded-3xl border border-orange-100 bg-brand-soft p-5">
-                    <p className="text-sm font-black text-brand-orange">Ready for review</p>
+                  <div className="rounded-3xl border border-yellow-200 bg-yellow-50 p-5">
+                    <p className="text-sm font-black text-brand-ink">Ready for review</p>
                     <p className="mt-1 text-sm leading-6 text-slate-700">
                       Nothing is submitted automatically on this step. Review the recommendation and
                       press the submit button when the feedback is ready to save.
@@ -548,7 +551,7 @@ function StepShell({
   return (
     <div>
       <div className="mb-6 flex items-center gap-3">
-        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-soft text-brand-orange ring-1 ring-orange-100">
+        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-sky text-brand-primary ring-1 ring-blue-100">
           {icon}
         </span>
         <h2 className="text-2xl font-black text-brand-ink">{title}</h2>

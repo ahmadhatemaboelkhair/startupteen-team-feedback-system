@@ -21,7 +21,7 @@ export function Header() {
           </span>
           <span>
             <span className="block text-base font-black text-brand-ink sm:text-lg">StartupTeen</span>
-            <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-brand-orange">
+            <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-brand-primary">
               Team Feedback
             </span>
           </span>

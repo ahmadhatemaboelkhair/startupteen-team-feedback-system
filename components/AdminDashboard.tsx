@@ -56,7 +56,7 @@ export function AdminDashboard() {
   const analytics = useMemo(() => buildAnalytics(filtered), [filtered]);
 
   if (status === "loading") {
-    return <AdminShell center={<Loader2 className="animate-spin text-brand-orange" size={42} />} />;
+    return <AdminShell center={<Loader2 className="animate-spin text-brand-primary" size={42} />} />;
   }
 
   if (status !== "authenticated") {
@@ -160,7 +160,7 @@ export function AdminDashboard() {
         <section className="surface overflow-hidden">
           <div className="flex items-center justify-between border-b border-slate-100 p-5">
             <h2 className="text-xl font-black text-brand-ink">Submissions</h2>
-            {loading && <Loader2 className="animate-spin text-brand-orange" size={22} />}
+            {loading && <Loader2 className="animate-spin text-brand-primary" size={22} />}
           </div>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[1100px] text-left text-sm">
@@ -180,7 +180,7 @@ export function AdminDashboard() {
                 {filtered.map((row) => (
                   <tr key={row.submissionId} className="transition hover:bg-brand-sky/60">
                     <td className="px-4 py-4">
-                      <p className="font-mono font-bold text-brand-orange">{row.submissionId}</p>
+                      <p className="font-mono font-bold text-brand-primary">{row.submissionId}</p>
                       <p className="text-xs text-slate-500">{row.timestamp}</p>
                     </td>
                     <td className="px-4 py-4">
@@ -201,7 +201,7 @@ export function AdminDashboard() {
                     <td className="px-4 py-4">
                       {row.uploadedFileUrl ? (
                         <a
-                          className="inline-flex items-center gap-1 font-bold text-brand-orange"
+                          className="inline-flex items-center gap-1 font-bold text-brand-primary"
                           href={row.uploadedFileUrl}
                           target="_blank"
                           rel="noreferrer"
@@ -283,10 +283,10 @@ function Comparison({ title, rows }: { title: string; rows: Array<{ name: string
           <div key={row.name}>
             <div className="mb-2 flex items-center justify-between gap-3 text-sm">
               <span className="font-bold text-slate-700">{row.name}</span>
-              <span className="font-black text-brand-orange">{row.average.toFixed(1)}</span>
+              <span className="font-black text-brand-primary">{row.average.toFixed(1)}</span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-              <div className="h-full rounded-full bg-brand-orange" style={{ width: `${row.average * 10}%` }} />
+              <div className="h-full rounded-full bg-brand-primary" style={{ width: `${row.average * 10}%` }} />
             </div>
             <p className="mt-1 text-xs text-slate-500">{row.count} submissions</p>
           </div>
