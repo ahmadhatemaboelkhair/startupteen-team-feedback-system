@@ -6,7 +6,7 @@ The interface is structured as a focused operational SaaS workflow: tutors compl
 
 The iSchool brand direction influenced the system through blue as the dominant product color, orange as the supporting action/accent color, and yellow as a sparse highlight. White product surfaces, rounded geometry, restrained shadows, clear hierarchy, and a modern education-product tone are used throughout. The brand reference URL was not directly readable from this environment, so the implementation follows the visible iSchool app language, supplied color-role screenshot, and the requirements provided in the brief.
 
-The provided StartupTeen logo is used as the primary product identity in the header and first-viewport progress panel.
+The provided StartupTeen logo is used in the header and progress panel. The first-viewport hero copy was removed for tutor efficiency and replaced with the iSchool logo as a clearer brand signal.
 
 ## Component Mapping
 
@@ -35,6 +35,12 @@ The tutor flow uses a seven-step wizard:
 7. Final recommendation and explicit submit
 
 The final page does not auto-submit. It acts as a final review checkpoint and only saves when the tutor presses **Submit Feedback**.
+
+Each wizard step has a distinct brand-color state so tutors get a visible sense of movement through the workflow:
+
+- Blue states for core information and system actions
+- Orange states for team/feedback emphasis
+- Yellow states for review and final attention moments
 
 The admin flow prioritizes scanning:
 

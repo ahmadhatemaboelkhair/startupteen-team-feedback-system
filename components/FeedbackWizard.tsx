@@ -21,9 +21,75 @@ import type { ChecklistResponse, FeedbackPayload, Scores } from "@/types/feedbac
 import { ProgressSteps } from "@/components/ProgressSteps";
 
 const steps = ["Tutor", "Team", "Session", "Checklist", "Scores", "Feedback", "Submit"];
+const ischoolLogoUrl = "https://i.postimg.cc/Tw5kzBkT/655a7c231e772cae143dec27-i-School-Logo-colors.webp";
 
 const inputBase = "field";
 const labelBase = "label";
+const stepThemes = [
+  {
+    name: "Blue",
+    hero: "from-blue-50 via-white to-white",
+    accent: "text-brand-primary",
+    icon: "bg-brand-sky text-brand-primary ring-blue-100",
+    bar: "bg-brand-primary",
+    button: "bg-brand-primary hover:bg-brand-blueDark shadow-[0_18px_36px_rgba(5,111,236,0.24)]",
+    panel: "border-blue-100 bg-brand-sky"
+  },
+  {
+    name: "Orange",
+    hero: "from-orange-50 via-white to-white",
+    accent: "text-brand-orange",
+    icon: "bg-brand-soft text-brand-orange ring-orange-100",
+    bar: "bg-brand-orange",
+    button: "bg-brand-orange hover:bg-brand-orangeDark shadow-brand",
+    panel: "border-orange-100 bg-brand-soft"
+  },
+  {
+    name: "Yellow",
+    hero: "from-yellow-50 via-white to-white",
+    accent: "text-brand-ink",
+    icon: "bg-yellow-50 text-brand-ink ring-yellow-200",
+    bar: "bg-brand-yellow",
+    button: "bg-brand-ink hover:bg-brand-blueDark shadow-soft",
+    panel: "border-yellow-200 bg-yellow-50"
+  },
+  {
+    name: "Blue",
+    hero: "from-blue-50 via-white to-white",
+    accent: "text-brand-primary",
+    icon: "bg-brand-sky text-brand-primary ring-blue-100",
+    bar: "bg-brand-primary",
+    button: "bg-brand-primary hover:bg-brand-blueDark shadow-[0_18px_36px_rgba(5,111,236,0.24)]",
+    panel: "border-blue-100 bg-brand-sky"
+  },
+  {
+    name: "Orange",
+    hero: "from-orange-50 via-white to-white",
+    accent: "text-brand-orange",
+    icon: "bg-brand-soft text-brand-orange ring-orange-100",
+    bar: "bg-brand-orange",
+    button: "bg-brand-orange hover:bg-brand-orangeDark shadow-brand",
+    panel: "border-orange-100 bg-brand-soft"
+  },
+  {
+    name: "Blue",
+    hero: "from-blue-50 via-white to-white",
+    accent: "text-brand-primary",
+    icon: "bg-brand-sky text-brand-primary ring-blue-100",
+    bar: "bg-brand-primary",
+    button: "bg-brand-primary hover:bg-brand-blueDark shadow-[0_18px_36px_rgba(5,111,236,0.24)]",
+    panel: "border-blue-100 bg-brand-sky"
+  },
+  {
+    name: "Yellow",
+    hero: "from-yellow-50 via-white to-white",
+    accent: "text-brand-ink",
+    icon: "bg-yellow-50 text-brand-ink ring-yellow-200",
+    bar: "bg-brand-yellow",
+    button: "bg-brand-ink hover:bg-brand-blueDark shadow-soft",
+    panel: "border-yellow-200 bg-yellow-50"
+  }
+];
 
 type SubmitState =
   | { status: "idle" }
@@ -63,6 +129,7 @@ export function FeedbackWizard() {
 
   const scoreAverage = useMemo(() => averageScore(data.scores), [data.scores]);
   const progressPercent = Math.round(((currentStep + 1) / steps.length) * 100);
+  const theme = stepThemes[currentStep];
 
   function update<K extends keyof FeedbackPayload>(key: K, value: FeedbackPayload[K]) {
     setData((previous) => ({ ...previous, [key]: value }));
@@ -177,24 +244,25 @@ export function FeedbackWizard() {
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <section className="mb-8 grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
         <div>
-          <div className="eyebrow">
-            <Sparkles size={16} />
-            StartupTeen Feedback Workspace
-          </div>
-          <h1 className="mt-5 max-w-3xl text-4xl font-black leading-[1.05] tracking-tight text-brand-ink sm:text-5xl">
-            Evaluate every team with clarity after each session.
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
-            A guided, mobile-ready form for tutors with structured deliverables, live scoring,
-            file uploads, and Google Sheets storage.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3 text-sm font-black text-brand-ink">
-            <span className="rounded-full border border-blue-100 bg-white px-4 py-2 shadow-sm">Google Sheets ready</span>
-            <span className="rounded-full border border-orange-100 bg-white px-4 py-2 shadow-sm">Drive uploads</span>
-            <span className="rounded-full border border-yellow-200 bg-white px-4 py-2 shadow-sm">Admin analytics</span>
+          <div className={["surface flex min-h-[260px] items-center p-8 bg-gradient-to-br", theme.hero].join(" ")}>
+            <div>
+              <Image
+                src={ischoolLogoUrl}
+                alt="iSchool"
+                width={440}
+                height={136}
+                className="h-auto w-full max-w-[430px] object-contain"
+                priority
+              />
+              <div className="mt-7 flex flex-wrap gap-3 text-sm font-black text-brand-ink">
+                <span className="rounded-full border border-blue-100 bg-white px-4 py-2 shadow-sm">Google Sheets ready</span>
+                <span className="rounded-full border border-orange-100 bg-white px-4 py-2 shadow-sm">Drive uploads</span>
+                <span className="rounded-full border border-yellow-200 bg-white px-4 py-2 shadow-sm">Admin analytics</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="surface p-5">
+        <div className={["surface p-5 bg-gradient-to-br", theme.hero].join(" ")}>
           <div className="flex h-full flex-col justify-between gap-6">
             <div className="flex items-center gap-4">
               <div className="grid h-20 w-20 shrink-0 place-items-center rounded-3xl bg-white shadow-sm ring-1 ring-slate-100">
@@ -208,18 +276,20 @@ export function FeedbackWizard() {
                 />
               </div>
               <div>
-                <p className="text-sm font-black uppercase tracking-wide text-brand-blue">Official workspace</p>
+                <p className={["text-sm font-black uppercase tracking-wide", theme.accent].join(" ")}>
+                  Official workspace
+                </p>
                 <p className="mt-1 text-2xl font-black text-brand-ink">Session feedback</p>
               </div>
             </div>
             <div>
               <div className="flex items-center justify-between gap-3">
                 <span className="text-sm font-bold text-slate-500">Form progress</span>
-                <span className="text-sm font-black text-brand-primary">{progressPercent}%</span>
+                <span className={["text-sm font-black", theme.accent].join(" ")}>{progressPercent}%</span>
               </div>
               <div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-100">
                 <div
-                  className="h-full rounded-full bg-brand-primary transition-all duration-500"
+                  className={["h-full rounded-full transition-all duration-500", theme.bar].join(" ")}
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
@@ -241,7 +311,7 @@ export function FeedbackWizard() {
               className="p-5 sm:p-8"
             >
               {currentStep === 0 && (
-                <StepShell icon={<ClipboardList />} title="Tutor Information">
+                <StepShell icon={<ClipboardList />} title="Tutor Information" theme={theme}>
                   <Field label="Tutor ID">
                     <input
                       className={inputBase}
@@ -280,7 +350,7 @@ export function FeedbackWizard() {
               )}
 
               {currentStep === 1 && (
-                <StepShell icon={<ClipboardList />} title="Team Information">
+                <StepShell icon={<ClipboardList />} title="Team Information" theme={theme}>
                   <Field label="Group ID">
                     <input
                       className={inputBase}
@@ -317,7 +387,7 @@ export function FeedbackWizard() {
               )}
 
               {currentStep === 2 && (
-                <StepShell icon={<CalendarDays />} title="Session Information">
+                <StepShell icon={<CalendarDays />} title="Session Information" theme={theme}>
                   <Field label="Session Date">
                     <input
                       className={inputBase}
@@ -338,8 +408,8 @@ export function FeedbackWizard() {
                       ))}
                     </select>
                   </Field>
-                  <div className="rounded-3xl border border-blue-100 bg-brand-sky p-5">
-                    <p className="text-sm font-black text-brand-primary">Deliverables loaded</p>
+                  <div className={["rounded-3xl border p-5", theme.panel].join(" ")}>
+                    <p className={["text-sm font-black", theme.accent].join(" ")}>Deliverables loaded</p>
                     <p className="mt-1 text-sm text-slate-700">
                       {sessionChecklists[data.sessionNumber].join(", ")}
                     </p>
@@ -348,7 +418,7 @@ export function FeedbackWizard() {
               )}
 
               {currentStep === 3 && (
-                <StepShell icon={<ClipboardList />} title={`${data.sessionNumber} Checklist`}>
+                <StepShell icon={<ClipboardList />} title={`${data.sessionNumber} Checklist`} theme={theme}>
                   <div className="space-y-4">
                     {data.checklist.map((item, index) => (
                       <div key={item.item} className="rounded-3xl border border-slate-100 bg-white p-4 shadow-sm">
@@ -397,7 +467,7 @@ export function FeedbackWizard() {
               )}
 
               {currentStep === 4 && (
-                <StepShell icon={<Sparkles />} title="Team Evaluation">
+                <StepShell icon={<Sparkles />} title="Team Evaluation" theme={theme}>
                   <div className="rounded-3xl bg-brand-ink p-5 text-white shadow-soft">
                     <p className="text-sm font-bold text-blue-100">Live score summary</p>
                     <div className="mt-3 flex items-end gap-3">
@@ -429,7 +499,7 @@ export function FeedbackWizard() {
               )}
 
               {currentStep === 5 && (
-                <StepShell icon={<FileUp />} title="Feedback">
+                <StepShell icon={<FileUp />} title="Feedback" theme={theme}>
                   <div className="grid gap-5 lg:grid-cols-2">
                     <div className="rounded-3xl border border-slate-100 bg-white p-4 shadow-sm">
                       <p className="mb-3 text-sm font-black text-brand-primary">Option A</p>
@@ -461,7 +531,7 @@ export function FeedbackWizard() {
               )}
 
               {currentStep === 6 && (
-                <StepShell icon={<Send />} title="Final Recommendation">
+                <StepShell icon={<Send />} title="Final Recommendation" theme={theme}>
                   <div className="rounded-3xl border border-yellow-200 bg-yellow-50 p-5">
                     <p className="text-sm font-black text-brand-ink">Ready for review</p>
                     <p className="mt-1 text-sm leading-6 text-slate-700">
@@ -516,7 +586,7 @@ export function FeedbackWizard() {
               <button
                 type="button"
                 onClick={next}
-                className="primary-button"
+                className={["primary-button", theme.button].join(" ")}
               >
                 Continue
                 <ArrowRight size={18} />
@@ -526,7 +596,7 @@ export function FeedbackWizard() {
                 type="button"
                 onClick={submit}
                 disabled={submitState.status === "loading"}
-                className="primary-button"
+                className={["primary-button", theme.button].join(" ")}
               >
                 {submitState.status === "loading" ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />}
                 Submit Feedback
@@ -542,16 +612,18 @@ export function FeedbackWizard() {
 function StepShell({
   icon,
   title,
-  children
+  children,
+  theme
 }: {
   icon: React.ReactNode;
   title: string;
   children: React.ReactNode;
+  theme: (typeof stepThemes)[number];
 }) {
   return (
     <div>
       <div className="mb-6 flex items-center gap-3">
-        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-sky text-brand-primary ring-1 ring-blue-100">
+        <span className={["grid h-12 w-12 place-items-center rounded-2xl ring-1", theme.icon].join(" ")}>
           {icon}
         </span>
         <h2 className="text-2xl font-black text-brand-ink">{title}</h2>
