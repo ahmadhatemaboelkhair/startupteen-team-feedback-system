@@ -1,9 +1,18 @@
 const CONFIG = {
   spreadsheetName: "StartupTeen Team Feedback Responses",
   sheetName: "Submissions",
+  schoolsSheetName: "Schools",
   driveFolderName: "StartupTeen Feedback Uploads",
   fileSharing: "PRIVATE" // Use "ANYONE_WITH_LINK" only if your organization approves link sharing.
 };
+
+const DEFAULT_SCHOOLS = [
+  "iSchool Maadi",
+  "iSchool Nasr City",
+  "iSchool 6th of October",
+  "iSchool Alexandria",
+  "iSchool Mansoura"
+];
 
 const ALL_CHECKLIST_ITEMS = [
   "Problem Statement",
@@ -70,6 +79,7 @@ const FINAL_HEADERS = [
 
 function setupFeedbackSystem() {
   const sheet = ensureSheet_();
+  ensureSchoolsSheet_();
   const folder = ensureFolder_();
   return {
     spreadsheetUrl: sheet.getParent().getUrl(),
@@ -97,6 +107,14 @@ function doPost(e) {
 
     if (request.action === "listSubmissions") {
       return json_(listSubmissions_());
+    }
+
+    if (request.action === "listSchools") {
+      return json_(listSchools_());
+    }
+
+    if (request.action === "addSchool") {
+      return json_(addSchool_(request.payload));
     }
 
     throw new Error("Unknown action: " + request.action);
@@ -213,6 +231,39 @@ function listSubmissions_() {
   return { ok: true, submissions: submissions };
 }
 
+function listSchools_() {
+  const sheet = ensureSchoolsSheet_();
+  const values = sheet.getDataRange().getValues();
+  const schools = values
+    .slice(1)
+    .map(function (row) {
+      return String(row[0] || "").trim();
+    })
+    .filter(Boolean);
+
+  return { ok: true, schools: schools };
+}
+
+function addSchool_(payload) {
+  const schoolName = String((payload && payload.schoolName) || "").trim();
+  if (!schoolName) {
+    throw new Error("School name is required.");
+  }
+
+  const sheet = ensureSchoolsSheet_();
+  const existing = listSchools_().schools;
+  const duplicate = existing.some(function (school) {
+    return school.toLowerCase() === schoolName.toLowerCase();
+  });
+
+  if (duplicate) {
+    throw new Error("This school already exists.");
+  }
+
+  sheet.appendRow([schoolName, new Date()]);
+  return listSchools_();
+}
+
 function ensureSheet_() {
   const properties = PropertiesService.getScriptProperties();
   let spreadsheetId = properties.getProperty("SPREADSHEET_ID");
@@ -244,6 +295,38 @@ function ensureSheet_() {
     sheet.autoResizeColumns(1, headers.length);
   }
 
+  return sheet;
+}
+
+function ensureSchoolsSheet_() {
+  const submissionSheet = ensureSheet_();
+  const spreadsheet = submissionSheet.getParent();
+  let sheet = spreadsheet.getSheetByName(CONFIG.schoolsSheetName);
+
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(CONFIG.schoolsSheetName);
+  }
+
+  const headers = ["School", "Created At"];
+  const currentHeaders = sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), headers.length)).getValues()[0];
+  const needsHeaders = headers.some(function (header, index) {
+    return currentHeaders[index] !== header;
+  });
+
+  if (needsHeaders) {
+    sheet.clear();
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    sheet.setFrozenRows(1);
+    sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold").setBackground("#056FEC").setFontColor("#ffffff");
+  }
+
+  if (sheet.getLastRow() === 1) {
+    DEFAULT_SCHOOLS.forEach(function (school) {
+      sheet.appendRow([school, new Date()]);
+    });
+  }
+
+  sheet.autoResizeColumns(1, headers.length);
   return sheet;
 }
 

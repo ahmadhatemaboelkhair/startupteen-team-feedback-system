@@ -471,13 +471,34 @@ https://your-vercel-domain.vercel.app/api/auth/callback/google
 
 ## 12. Add Schools To The Dropdown
 
-Schools are configured in:
+Admins can now add schools directly from the admin dashboard.
+
+1. Open your deployed website.
+2. Click **Admin**.
+3. Sign in with an approved admin Google account.
+4. Find the **Schools** panel.
+5. Type the new school name.
+6. Click **Add School**.
+7. Open the tutor form again.
+8. The school appears in the School dropdown.
+
+Schools are stored in the Google Sheet tab named:
+
+```text
+Schools
+```
+
+The Apps Script creates this tab automatically and seeds the default schools.
+
+Fallback schools are still configured in:
 
 ```text
 config/schools.ts
 ```
 
-Example:
+These are only used if the website cannot reach Apps Script.
+
+Example fallback edit:
 
 ```ts
 export const schools = [
@@ -487,14 +508,14 @@ export const schools = [
 ];
 ```
 
-After editing:
+After editing fallback schools:
 
 1. Save the file.
 2. Commit the change.
 3. Push to GitHub.
 4. Vercel will redeploy automatically.
 
-No Apps Script change is needed for school updates.
+For normal school updates, use the admin dashboard instead.
 
 ## 13. Update Session Checklists Later
 
