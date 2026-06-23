@@ -3,7 +3,22 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { BarChart3, Download, ExternalLink, Filter, Loader2, LogIn, LogOut, Plus, Search, School } from "lucide-react";
+import {
+  BarChart3,
+  Check,
+  Download,
+  ExternalLink,
+  Filter,
+  Loader2,
+  LogIn,
+  LogOut,
+  Pencil,
+  Plus,
+  Search,
+  School,
+  Trash2,
+  X
+} from "lucide-react";
 import { scoreLabels } from "@/lib/submission";
 import type { SubmissionRow } from "@/types/feedback";
 
@@ -32,6 +47,8 @@ export function AdminDashboard() {
   const [submissions, setSubmissions] = useState<SubmissionRow[]>([]);
   const [schools, setSchools] = useState<string[]>([]);
   const [schoolName, setSchoolName] = useState("");
+  const [editingSchool, setEditingSchool] = useState("");
+  const [editingValue, setEditingValue] = useState("");
   const [schoolStatus, setSchoolStatus] = useState<{ type: "idle" | "loading" | "success" | "error"; message: string }>({
     type: "idle",
     message: ""
@@ -207,11 +224,51 @@ export function AdminDashboard() {
               {schoolStatus.message}
             </div>
           )}
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="mt-5 grid gap-2">
             {schools.map((school) => (
-              <span key={school} className="rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-black text-slate-700 shadow-sm">
-                {school}
-              </span>
+              <div
+                key={school}
+                className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:flex-row sm:items-center sm:justify-between"
+              >
+                {editingSchool === school ? (
+                  <input
+                    className="field"
+                    value={editingValue}
+                    onChange={(event) => setEditingValue(event.target.value)}
+                    autoFocus
+                  />
+                ) : (
+                  <span className="text-sm font-black text-slate-700">{school}</span>
+                )}
+                <div className="flex flex-wrap gap-2">
+                  {editingSchool === school ? (
+                    <>
+                      <button className="admin-button" onClick={() => updateSchool(school)}>
+                        <Check size={16} />
+                        Save
+                      </button>
+                      <button className="admin-button" onClick={cancelEditSchool}>
+                        <X size={16} />
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button className="admin-button" onClick={() => startEditSchool(school)}>
+                        <Pencil size={16} />
+                        Edit
+                      </button>
+                      <button
+                        className="admin-button border-red-100 text-red-700 hover:border-red-200 hover:text-red-800"
+                        onClick={() => deleteSchool(school)}
+                      >
+                        <Trash2 size={16} />
+                        Remove
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
             ))}
             {schools.length === 0 && <p className="text-sm text-slate-500">No schools configured yet.</p>}
           </div>
@@ -322,6 +379,67 @@ export function AdminDashboard() {
     setSchools(result.schools ?? []);
     setSchoolName("");
     setSchoolStatus({ type: "success", message: `${nextSchool} was added to the tutor dropdown.` });
+  }
+
+  function startEditSchool(school: string) {
+    setEditingSchool(school);
+    setEditingValue(school);
+    setSchoolStatus({ type: "idle", message: "" });
+  }
+
+  function cancelEditSchool() {
+    setEditingSchool("");
+    setEditingValue("");
+    setSchoolStatus({ type: "idle", message: "" });
+  }
+
+  async function updateSchool(oldSchoolName: string) {
+    const newSchoolName = editingValue.trim();
+    if (!newSchoolName) {
+      setSchoolStatus({ type: "error", message: "School name cannot be empty." });
+      return;
+    }
+
+    setSchoolStatus({ type: "loading", message: "" });
+    const response = await fetch("/api/admin/schools", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ oldSchoolName, newSchoolName })
+    });
+    const result = await response.json();
+
+    if (!response.ok || !result.ok) {
+      setSchoolStatus({ type: "error", message: result.error || "Unable to update school." });
+      return;
+    }
+
+    setSchools(result.schools ?? []);
+    setEditingSchool("");
+    setEditingValue("");
+    setSchoolStatus({ type: "success", message: `${oldSchoolName} was updated to ${newSchoolName}.` });
+  }
+
+  async function deleteSchool(schoolNameToDelete: string) {
+    const confirmed = window.confirm(`Remove ${schoolNameToDelete} from the tutor dropdown?`);
+    if (!confirmed) {
+      return;
+    }
+
+    setSchoolStatus({ type: "loading", message: "" });
+    const response = await fetch("/api/admin/schools", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ schoolName: schoolNameToDelete })
+    });
+    const result = await response.json();
+
+    if (!response.ok || !result.ok) {
+      setSchoolStatus({ type: "error", message: result.error || "Unable to delete school." });
+      return;
+    }
+
+    setSchools(result.schools ?? []);
+    setSchoolStatus({ type: "success", message: `${schoolNameToDelete} was removed from the tutor dropdown.` });
   }
 }
 

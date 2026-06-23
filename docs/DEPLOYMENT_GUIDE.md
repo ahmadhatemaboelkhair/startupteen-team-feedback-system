@@ -482,6 +482,21 @@ Admins can now add schools directly from the admin dashboard.
 7. Open the tutor form again.
 8. The school appears in the School dropdown.
 
+To edit a school:
+
+1. Open **Admin**.
+2. Find the **Schools** panel.
+3. Click **Edit** beside the school.
+4. Change the name.
+5. Click **Save**.
+
+To remove a school:
+
+1. Open **Admin**.
+2. Find the **Schools** panel.
+3. Click **Remove** beside the school.
+4. Confirm the removal.
+
 Schools are stored in the Google Sheet tab named:
 
 ```text

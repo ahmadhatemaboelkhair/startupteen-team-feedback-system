@@ -117,6 +117,14 @@ function doPost(e) {
       return json_(addSchool_(request.payload));
     }
 
+    if (request.action === "updateSchool") {
+      return json_(updateSchool_(request.payload));
+    }
+
+    if (request.action === "deleteSchool") {
+      return json_(deleteSchool_(request.payload));
+    }
+
     throw new Error("Unknown action: " + request.action);
   } catch (error) {
     return json_({ ok: false, error: error.message || String(error) });
@@ -262,6 +270,63 @@ function addSchool_(payload) {
 
   sheet.appendRow([schoolName, new Date()]);
   return listSchools_();
+}
+
+function updateSchool_(payload) {
+  const oldSchoolName = String((payload && payload.oldSchoolName) || "").trim();
+  const newSchoolName = String((payload && payload.newSchoolName) || "").trim();
+
+  if (!oldSchoolName || !newSchoolName) {
+    throw new Error("Old and new school names are required.");
+  }
+
+  const sheet = ensureSchoolsSheet_();
+  const existing = listSchools_().schools;
+  const duplicate = existing.some(function (school) {
+    return school.toLowerCase() === newSchoolName.toLowerCase() && school.toLowerCase() !== oldSchoolName.toLowerCase();
+  });
+
+  if (duplicate) {
+    throw new Error("This school already exists.");
+  }
+
+  const rowIndex = findSchoolRow_(sheet, oldSchoolName);
+  if (rowIndex === -1) {
+    throw new Error("School was not found.");
+  }
+
+  sheet.getRange(rowIndex, 1, 1, 2).setValues([[newSchoolName, new Date()]]);
+  return listSchools_();
+}
+
+function deleteSchool_(payload) {
+  const schoolName = String((payload && payload.schoolName) || "").trim();
+  if (!schoolName) {
+    throw new Error("School name is required.");
+  }
+
+  const sheet = ensureSchoolsSheet_();
+  const rowIndex = findSchoolRow_(sheet, schoolName);
+  if (rowIndex === -1) {
+    throw new Error("School was not found.");
+  }
+
+  sheet.deleteRow(rowIndex);
+  return listSchools_();
+}
+
+function findSchoolRow_(sheet, schoolName) {
+  const values = sheet.getDataRange().getValues();
+  const target = schoolName.toLowerCase();
+
+  for (let index = 1; index < values.length; index++) {
+    const current = String(values[index][0] || "").trim().toLowerCase();
+    if (current === target) {
+      return index + 1;
+    }
+  }
+
+  return -1;
 }
 
 function ensureSheet_() {

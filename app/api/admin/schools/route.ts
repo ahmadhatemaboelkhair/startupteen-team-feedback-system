@@ -51,3 +51,63 @@ export async function POST(request: Request) {
     );
   }
 }
+
+export async function PATCH(request: Request) {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.email) {
+    return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const body = await request.json();
+    const oldSchoolName = String(body.oldSchoolName ?? "").trim();
+    const newSchoolName = String(body.newSchoolName ?? "").trim();
+
+    if (!oldSchoolName || !newSchoolName) {
+      return NextResponse.json({ ok: false, error: "Old and new school names are required." }, { status: 400 });
+    }
+
+    const data = await callAppsScript<{ schools: string[] }>("updateSchool", {
+      oldSchoolName,
+      newSchoolName,
+      adminEmail: session.user.email
+    });
+
+    return NextResponse.json({ ok: true, schools: data.schools ?? [] });
+  } catch (error) {
+    return NextResponse.json(
+      { ok: false, error: error instanceof Error ? error.message : "Unable to update school." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: Request) {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.email) {
+    return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const body = await request.json();
+    const schoolName = String(body.schoolName ?? "").trim();
+
+    if (!schoolName) {
+      return NextResponse.json({ ok: false, error: "School name is required." }, { status: 400 });
+    }
+
+    const data = await callAppsScript<{ schools: string[] }>("deleteSchool", {
+      schoolName,
+      adminEmail: session.user.email
+    });
+
+    return NextResponse.json({ ok: true, schools: data.schools ?? [] });
+  } catch (error) {
+    return NextResponse.json(
+      { ok: false, error: error instanceof Error ? error.message : "Unable to delete school." },
+      { status: 500 }
+    );
+  }
+}
