@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
@@ -84,7 +84,7 @@ export function FeedbackWizard() {
 
   function canAdvance() {
     if (currentStep === 0) {
-      return /^T-\d{5}$/.test(data.tutorId) && data.tutorName.trim() && data.school;
+      return /^T-\d+$/.test(data.tutorId) && data.tutorName.trim() && data.school;
     }
     if (currentStep === 1) {
       return /^G-\d{4}$/.test(data.groupId) && data.teamName.trim() && data.membersCount > 0;
@@ -112,8 +112,7 @@ export function FeedbackWizard() {
     setCurrentStep((value) => Math.max(value - 1, 0));
   }
 
-  async function submit(event: FormEvent) {
-    event.preventDefault();
+  async function submit() {
     const validationError = validateFeedbackPayload({
       ...data,
       feedbackText: data.feedbackText || (file ? "Uploaded feedback document" : "")
@@ -205,7 +204,7 @@ export function FeedbackWizard() {
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         <ProgressSteps steps={steps} current={currentStep} />
-        <form onSubmit={submit} className="card overflow-hidden">
+        <div className="card overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.section
               key={currentStep}
@@ -224,8 +223,11 @@ export function FeedbackWizard() {
                       placeholder="T-12345"
                       value={data.tutorId}
                       onChange={(event) => update("tutorId", event.target.value.toUpperCase())}
-                      pattern="T-\d{5}"
+                      pattern="T-\d+"
                     />
+                    <span className="mt-2 block text-xs font-semibold text-slate-500">
+                      Use T- followed by numbers, for example T-1080.
+                    </span>
                   </Field>
                   <Field label="Tutor Name">
                     <input
@@ -431,6 +433,13 @@ export function FeedbackWizard() {
 
               {currentStep === 6 && (
                 <StepShell icon={<Send />} title="Final Recommendation">
+                  <div className="rounded-3xl border border-orange-100 bg-brand-soft p-5">
+                    <p className="text-sm font-black text-brand-orange">Ready for review</p>
+                    <p className="mt-1 text-sm leading-6 text-slate-700">
+                      Nothing is submitted automatically on this step. Review the recommendation and
+                      press the submit button when the feedback is ready to save.
+                    </p>
+                  </div>
                   <Field label="Recommendation">
                     <select
                       className={inputBase}
@@ -485,7 +494,8 @@ export function FeedbackWizard() {
               </button>
             ) : (
               <button
-                type="submit"
+                type="button"
+                onClick={submit}
                 disabled={submitState.status === "loading"}
                 className="inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-orange px-6 py-3 font-black text-white shadow-lg shadow-orange-200 transition hover:bg-brand-orangeDark disabled:cursor-wait disabled:opacity-70"
               >
@@ -494,7 +504,7 @@ export function FeedbackWizard() {
               </button>
             )}
           </div>
-        </form>
+        </div>
       </div>
     </main>
   );

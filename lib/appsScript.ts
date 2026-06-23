@@ -26,7 +26,10 @@ export async function callAppsScript<T>(action: string, payload?: unknown): Prom
   try {
     data = JSON.parse(text);
   } catch {
-    throw new Error("Apps Script returned an invalid response.");
+    const preview = text.replace(/\s+/g, " ").slice(0, 180);
+    throw new Error(
+      `Apps Script returned an invalid response. Check that GOOGLE_APPS_SCRIPT_URL is the deployed /exec web app URL and access is set to Anyone. Response preview: ${preview}`
+    );
   }
 
   if (!response.ok || data.ok === false) {

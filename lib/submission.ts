@@ -32,8 +32,8 @@ export function createSubmissionId() {
 }
 
 export function validateFeedbackPayload(payload: FeedbackPayload) {
-  if (!/^T-\d{5}$/.test(payload.tutorId)) {
-    return "Tutor ID must use the format T-#####.";
+  if (!/^T-\d+$/.test(payload.tutorId)) {
+    return "Tutor ID must use T- followed by numbers.";
   }
   if (!/^G-\d{4}$/.test(payload.groupId)) {
     return "Group ID must use the format G-####.";

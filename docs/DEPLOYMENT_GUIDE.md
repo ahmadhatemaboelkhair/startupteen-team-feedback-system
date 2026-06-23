@@ -198,10 +198,10 @@ http://localhost:3000
 ```
 
 4. Submit a test response.
-5. Use a Tutor ID like:
+5. Use a Tutor ID that starts with `T-` followed by numbers, like:
 
 ```text
-T-12345
+T-1080
 ```
 
 6. Use a Group ID like:
@@ -570,6 +570,38 @@ If submissions fail:
 3. Confirm Apps Script is deployed as a web app.
 4. Confirm web app access is **Anyone**.
 5. Open Apps Script **Executions** to read the error.
+
+If the website says `Apps Script returned an invalid response`:
+
+1. Confirm the URL in `.env.local` or Vercel is the Apps Script **Web app URL**.
+2. The URL must end with:
+
+```text
+/exec
+```
+
+3. Do not use a URL ending with:
+
+```text
+/dev
+```
+
+4. In Apps Script, click **Deploy > Manage deployments**.
+5. Edit the active web app deployment.
+6. Confirm:
+
+```text
+Execute as: Me
+Who has access: Anyone
+```
+
+7. Open the Apps Script URL in your browser. It should show a JSON message like:
+
+```json
+{"ok":true,"app":"StartupTeen Team Feedback System"}
+```
+
+8. If you see a Google login page, permission page, or HTML error page, the web app access setting or URL is wrong.
 
 If admin login fails:
 

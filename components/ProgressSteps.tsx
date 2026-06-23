@@ -10,13 +10,16 @@ type Props = {
 export function ProgressSteps({ steps, current }: Props) {
   return (
     <div className="card p-4 sm:p-5">
-      <div className="grid gap-3 sm:grid-cols-7">
+      <div className="flex gap-3 overflow-x-auto pb-1 lg:grid lg:grid-cols-1 lg:overflow-visible lg:pb-0">
         {steps.map((step, index) => {
           const active = index === current;
           const complete = index < current;
 
           return (
-            <div key={step} className="flex items-center gap-2 sm:flex-col sm:items-start">
+            <div
+              key={step}
+              className="flex min-w-[92px] items-center gap-2 lg:min-w-0 lg:rounded-2xl lg:p-2"
+            >
               <span
                 className={[
                   "grid h-9 w-9 shrink-0 place-items-center rounded-full text-sm font-black transition",
@@ -29,12 +32,7 @@ export function ProgressSteps({ steps, current }: Props) {
               >
                 {complete ? <Check size={17} /> : index + 1}
               </span>
-              <span
-                className={[
-                  "text-xs font-bold leading-tight",
-                  active ? "text-brand-ink" : "text-slate-500"
-                ].join(" ")}
-              >
+              <span className={["text-xs font-bold leading-tight", active ? "text-brand-ink" : "text-slate-500"].join(" ")}>
                 {step}
               </span>
             </div>
