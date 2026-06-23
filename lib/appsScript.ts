@@ -33,7 +33,14 @@ export async function callAppsScript<T>(action: string, payload?: unknown): Prom
   }
 
   if (!response.ok || data.ok === false) {
-    throw new Error(data.error || "Apps Script request failed.");
+    const baseError = data.error || "Apps Script request failed.";
+    if (/^Unknown action:/i.test(baseError)) {
+      throw new Error(
+        `${baseError} Your deployed Apps Script is stale. Paste the latest scripts/Code.gs into Google Apps Script, save, and deploy a new version.`
+      );
+    }
+
+    throw new Error(baseError);
   }
 
   return data;

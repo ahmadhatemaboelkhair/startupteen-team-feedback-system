@@ -607,6 +607,17 @@ If submissions fail:
 4. Confirm web app access is **Anyone**.
 5. Open Apps Script **Executions** to read the error.
 
+If you see `Unknown action: deleteSchool`, `Unknown action: updateSchool`, or `Unknown action: listSchools`:
+
+1. Your deployed Apps Script is still using an older version.
+2. Open Google Apps Script.
+3. Paste the latest `scripts/Code.gs` from this project.
+4. Save.
+5. Click **Deploy > Manage deployments**.
+6. Edit the active web app deployment.
+7. Select **New version**.
+8. Click **Deploy**.
+
 If the website says `Apps Script returned an invalid response`:
 
 1. Confirm the URL in `.env.local` or Vercel is the Apps Script **Web app URL**.
