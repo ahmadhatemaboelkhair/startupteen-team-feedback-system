@@ -21,7 +21,6 @@ import type { ChecklistResponse, FeedbackPayload, Scores } from "@/types/feedbac
 import { ProgressSteps } from "@/components/ProgressSteps";
 
 const steps = ["Tutor", "Team", "Session", "Checklist", "Scores", "Feedback", "Submit"];
-const ischoolLogoUrl = "https://i.postimg.cc/Tw5kzBkT/655a7c231e772cae143dec27-i-School-Logo-colors.webp";
 
 const inputBase = "field";
 const labelBase = "label";
@@ -241,38 +240,38 @@ export function FeedbackWizard() {
   }
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <section className="mb-8 grid gap-6 lg:grid-cols-[1.12fr_0.88fr] lg:items-stretch">
-        <div>
+    <main className="mx-auto w-full max-w-7xl overflow-x-hidden px-3 py-5 sm:px-6 sm:py-8 lg:px-8">
+      <section className="mb-5 grid min-w-0 gap-4 sm:mb-8 sm:gap-6 lg:grid-cols-[1.12fr_0.88fr] lg:items-stretch">
+        <div className="min-w-0">
           <div
             className={[
-              "surface flex min-h-[300px] items-center justify-center overflow-hidden p-8 bg-gradient-to-br",
+              "surface flex min-h-[220px] items-center justify-center overflow-hidden p-5 bg-gradient-to-br sm:min-h-[260px] sm:p-8 lg:min-h-[300px]",
               theme.hero
             ].join(" ")}
           >
             <motion.div
               animate={{ y: [0, -8, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="w-full max-w-[560px]"
+              className="w-full max-w-[220px] sm:max-w-[300px] lg:max-w-[360px]"
             >
               <Image
-                src={ischoolLogoUrl}
-                alt="iSchool"
-                width={620}
-                height={190}
+                src="/startupteen-logo.png"
+                alt="StartupTeen"
+                width={360}
+                height={360}
                 className="h-auto w-full object-contain drop-shadow-[0_20px_35px_rgba(5,111,236,0.16)]"
                 priority
               />
             </motion.div>
           </div>
         </div>
-        <div className={["surface flex items-center p-6 bg-gradient-to-br", theme.hero].join(" ")}>
+        <div className={["surface flex min-w-0 items-center p-5 sm:p-6 bg-gradient-to-br", theme.hero].join(" ")}>
           <div className="w-full">
             <div className="mb-5">
               <p className={["text-sm font-black uppercase tracking-wide", theme.accent].join(" ")}>
                 Session feedback
               </p>
-              <p className="mt-1 text-xl font-black text-brand-ink">Step {currentStep + 1} of {steps.length}</p>
+              <p className="mt-1 text-lg font-black text-brand-ink sm:text-xl">Step {currentStep + 1} of {steps.length}</p>
             </div>
             <div className="flex items-center justify-between gap-3">
               <span className="text-sm font-bold text-slate-500">Form progress</span>
@@ -288,9 +287,9 @@ export function FeedbackWizard() {
         </div>
       </section>
 
-      <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+      <div className="grid min-w-0 gap-4 sm:gap-6 lg:grid-cols-[280px_1fr]">
         <ProgressSteps steps={steps} current={currentStep} />
-        <div className="surface overflow-hidden">
+        <div className="surface min-w-0 overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.section
               key={currentStep}
