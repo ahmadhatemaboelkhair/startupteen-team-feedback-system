@@ -242,57 +242,47 @@ export function FeedbackWizard() {
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <section className="mb-8 grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
+      <section className="mb-8 grid gap-6 lg:grid-cols-[1.12fr_0.88fr] lg:items-stretch">
         <div>
-          <div className={["surface flex min-h-[260px] items-center p-8 bg-gradient-to-br", theme.hero].join(" ")}>
-            <div>
+          <div
+            className={[
+              "surface flex min-h-[300px] items-center justify-center overflow-hidden p-8 bg-gradient-to-br",
+              theme.hero
+            ].join(" ")}
+          >
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="w-full max-w-[560px]"
+            >
               <Image
                 src={ischoolLogoUrl}
                 alt="iSchool"
-                width={440}
-                height={136}
-                className="h-auto w-full max-w-[430px] object-contain"
+                width={620}
+                height={190}
+                className="h-auto w-full object-contain drop-shadow-[0_20px_35px_rgba(5,111,236,0.16)]"
                 priority
               />
-              <div className="mt-7 flex flex-wrap gap-3 text-sm font-black text-brand-ink">
-                <span className="rounded-full border border-blue-100 bg-white px-4 py-2 shadow-sm">Google Sheets ready</span>
-                <span className="rounded-full border border-orange-100 bg-white px-4 py-2 shadow-sm">Drive uploads</span>
-                <span className="rounded-full border border-yellow-200 bg-white px-4 py-2 shadow-sm">Admin analytics</span>
-              </div>
-            </div>
+            </motion.div>
           </div>
         </div>
-        <div className={["surface p-5 bg-gradient-to-br", theme.hero].join(" ")}>
-          <div className="flex h-full flex-col justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="grid h-20 w-20 shrink-0 place-items-center rounded-3xl bg-white shadow-sm ring-1 ring-slate-100">
-                <Image
-                  src="/startupteen-logo.png"
-                  alt="StartupTeen"
-                  width={72}
-                  height={72}
-                  className="h-16 w-16 object-contain"
-                  priority
-                />
-              </div>
-              <div>
-                <p className={["text-sm font-black uppercase tracking-wide", theme.accent].join(" ")}>
-                  Official workspace
-                </p>
-                <p className="mt-1 text-2xl font-black text-brand-ink">Session feedback</p>
-              </div>
+        <div className={["surface flex items-center p-6 bg-gradient-to-br", theme.hero].join(" ")}>
+          <div className="w-full">
+            <div className="mb-5">
+              <p className={["text-sm font-black uppercase tracking-wide", theme.accent].join(" ")}>
+                Session feedback
+              </p>
+              <p className="mt-1 text-xl font-black text-brand-ink">Step {currentStep + 1} of {steps.length}</p>
             </div>
-            <div>
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-sm font-bold text-slate-500">Form progress</span>
-                <span className={["text-sm font-black", theme.accent].join(" ")}>{progressPercent}%</span>
-              </div>
-              <div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-100">
-                <div
-                  className={["h-full rounded-full transition-all duration-500", theme.bar].join(" ")}
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-sm font-bold text-slate-500">Form progress</span>
+              <span className={["text-sm font-black", theme.accent].join(" ")}>{progressPercent}%</span>
+            </div>
+            <div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-100">
+              <div
+                className={["h-full rounded-full transition-all duration-500", theme.bar].join(" ")}
+                style={{ width: `${progressPercent}%` }}
+              />
             </div>
           </div>
         </div>
