@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { BarChart3, Download, ExternalLink, Filter, Loader2, LogIn, LogOut, Search } from "lucide-react";
+import { BarChart3, Download, ExternalLink, Filter, Loader2, LogIn, LogOut, Plus, Search, School } from "lucide-react";
 import { scoreLabels } from "@/lib/submission";
 import type { SubmissionRow } from "@/types/feedback";
 
@@ -30,6 +30,12 @@ const emptyFilters: Filters = {
 export function AdminDashboard() {
   const { data: session, status } = useSession();
   const [submissions, setSubmissions] = useState<SubmissionRow[]>([]);
+  const [schools, setSchools] = useState<string[]>([]);
+  const [schoolName, setSchoolName] = useState("");
+  const [schoolStatus, setSchoolStatus] = useState<{ type: "idle" | "loading" | "success" | "error"; message: string }>({
+    type: "idle",
+    message: ""
+  });
   const [filters, setFilters] = useState<Filters>(emptyFilters);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -50,6 +56,21 @@ export function AdminDashboard() {
       })
       .catch((loadError) => setError(loadError instanceof Error ? loadError.message : "Unable to load submissions."))
       .finally(() => setLoading(false));
+
+    fetch("/api/admin/schools")
+      .then((response) => response.json())
+      .then((result) => {
+        if (!result.ok) {
+          throw new Error(result.error || "Unable to load schools.");
+        }
+        setSchools(result.schools ?? []);
+      })
+      .catch((loadError) =>
+        setSchoolStatus({
+          type: "error",
+          message: loadError instanceof Error ? loadError.message : "Unable to load schools."
+        })
+      );
   }, [status]);
 
   const filtered = useMemo(() => applyFilters(submissions, filters), [submissions, filters]);
@@ -152,6 +173,50 @@ export function AdminDashboard() {
           </div>
         </section>
 
+        <section className="surface mb-6 p-5">
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-2 text-lg font-black text-brand-ink">
+              <School size={20} />
+              Schools
+            </div>
+            <span className="rounded-full bg-brand-sky px-3 py-1 text-xs font-black text-brand-primary">
+              {schools.length} configured
+            </span>
+          </div>
+          <div className="grid gap-3 lg:grid-cols-[1fr_auto]">
+            <label className="block">
+              <span className="mb-2 block text-sm font-bold text-slate-600">Add school to tutor dropdown</span>
+              <input
+                className="field"
+                value={schoolName}
+                placeholder="Example: iSchool New Cairo"
+                onChange={(event) => setSchoolName(event.target.value)}
+              />
+            </label>
+            <button
+              onClick={addSchool}
+              disabled={schoolStatus.type === "loading"}
+              className="primary-button mt-7"
+            >
+              {schoolStatus.type === "loading" ? <Loader2 className="animate-spin" size={17} /> : <Plus size={17} />}
+              Add School
+            </button>
+          </div>
+          {schoolStatus.message && (
+            <div className={schoolStatus.type === "error" ? "status-error mt-4" : "mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm font-black text-emerald-700"}>
+              {schoolStatus.message}
+            </div>
+          )}
+          <div className="mt-5 flex flex-wrap gap-2">
+            {schools.map((school) => (
+              <span key={school} className="rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-black text-slate-700 shadow-sm">
+                {school}
+              </span>
+            ))}
+            {schools.length === 0 && <p className="text-sm text-slate-500">No schools configured yet.</p>}
+          </div>
+        </section>
+
         <section className="mb-6 grid gap-6 lg:grid-cols-2">
           <Comparison title="School performance comparison" rows={analytics.schoolPerformance} />
           <Comparison title="Session performance comparison" rows={analytics.sessionPerformance} />
@@ -232,6 +297,31 @@ export function AdminDashboard() {
 
   function updateFilter(key: keyof Filters, value: string) {
     setFilters((previous) => ({ ...previous, [key]: value }));
+  }
+
+  async function addSchool() {
+    const nextSchool = schoolName.trim();
+    if (!nextSchool) {
+      setSchoolStatus({ type: "error", message: "Write a school name first." });
+      return;
+    }
+
+    setSchoolStatus({ type: "loading", message: "" });
+    const response = await fetch("/api/admin/schools", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ schoolName: nextSchool })
+    });
+    const result = await response.json();
+
+    if (!response.ok || !result.ok) {
+      setSchoolStatus({ type: "error", message: result.error || "Unable to add school." });
+      return;
+    }
+
+    setSchools(result.schools ?? []);
+    setSchoolName("");
+    setSchoolStatus({ type: "success", message: `${nextSchool} was added to the tutor dropdown.` });
   }
 }
 

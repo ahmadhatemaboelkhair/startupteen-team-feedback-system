@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
@@ -109,6 +109,7 @@ function buildChecklist(session: SessionNumber): ChecklistResponse[] {
 export function FeedbackWizard() {
   const [currentStep, setCurrentStep] = useState(0);
   const [file, setFile] = useState<File | null>(null);
+  const [schoolOptions, setSchoolOptions] = useState(schools);
   const [submitState, setSubmitState] = useState<SubmitState>({ status: "idle" });
   const [data, setData] = useState<FeedbackPayload>({
     tutorId: "",
@@ -129,6 +130,20 @@ export function FeedbackWizard() {
   const scoreAverage = useMemo(() => averageScore(data.scores), [data.scores]);
   const progressPercent = Math.round(((currentStep + 1) / steps.length) * 100);
   const theme = stepThemes[currentStep];
+
+  useEffect(() => {
+    fetch("/api/schools")
+      .then((response) => response.json())
+      .then((result) => {
+        const nextSchools = Array.isArray(result.schools) && result.schools.length ? result.schools : schools;
+        setSchoolOptions(nextSchools);
+        setData((previous) => ({
+          ...previous,
+          school: nextSchools.includes(previous.school) ? previous.school : nextSchools[0] || ""
+        }));
+      })
+      .catch(() => setSchoolOptions(schools));
+  }, []);
 
   function update<K extends keyof FeedbackPayload>(key: K, value: FeedbackPayload[K]) {
     setData((previous) => ({ ...previous, [key]: value }));
@@ -330,7 +345,7 @@ export function FeedbackWizard() {
                       value={data.school}
                       onChange={(event) => update("school", event.target.value)}
                     >
-                      {schools.map((school) => (
+                      {schoolOptions.map((school) => (
                         <option key={school}>{school}</option>
                       ))}
                     </select>
